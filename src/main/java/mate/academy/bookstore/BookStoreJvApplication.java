@@ -1,7 +1,5 @@
 package mate.academy.bookstore;
 
-import java.math.BigDecimal;
-import mate.academy.bookstore.model.Book;
 import mate.academy.bookstore.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -23,13 +21,7 @@ public class BookStoreJvApplication {
         return new CommandLineRunner() {
             @Override
             public void run(String... args) throws Exception {
-                Book book = new Book();
-                book.setTitle("Code jv");
-                book.setPrice(BigDecimal.valueOf(1000));
 
-                bookService.save(book);
-
-                System.out.println(bookService.findAll());
             }
         };
     }
