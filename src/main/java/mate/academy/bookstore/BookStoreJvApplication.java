@@ -1,5 +1,8 @@
 package mate.academy.bookstore;
 
+import java.math.BigDecimal;
+import java.util.List;
+import mate.academy.bookstore.model.Book;
 import mate.academy.bookstore.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -21,7 +24,16 @@ public class BookStoreJvApplication {
         return new CommandLineRunner() {
             @Override
             public void run(String... args) throws Exception {
+                Book book = new Book();
 
+                book.setTitle("Book 1");
+                book.setPrice(BigDecimal.valueOf(1000));
+                book.setIsbn("412412");
+                book.setAuthor("John Smith");
+
+                bookService.save(book);
+                List<Book> books = bookService.findAll();
+                System.out.println(books);
             }
         };
     }
