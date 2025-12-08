@@ -1,51 +1,38 @@
 package mate.academy.bookstore.repository;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
-import mate.academy.bookstore.exceptions.DataProcessingException;
+import java.util.Optional;
 import mate.academy.bookstore.model.Book;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-@RequiredArgsConstructor
 public class BookRepositoryImpl implements BookRepository {
-    private final SessionFactory sessionFactory;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
+    @Transactional
     public Book save(Book book) {
-        Session session = null;
-        Transaction transaction = null;
-
-        try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
-
-            session.persist(book);
-            transaction.commit();
-
+        if (book.getId() == null) {
+            entityManager.persist(book);
             return book;
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-
-            throw new DataProcessingException("Can't save book", e);
-        } finally {
-            if (session != null) {
-                session.close();
-            }
         }
+        return entityManager.merge(book);
     }
 
     @Override
     public List<Book> findAll() {
-        try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from Book", Book.class).getResultList();
-        } catch (Exception e) {
-            throw new DataProcessingException("Can't find all books", e);
-        }
+        return entityManager
+                .createQuery("from Book", Book.class)
+                .getResultList();
+    }
+
+    @Override
+    public Optional<Book> findById(Long id) {
+        return Optional.ofNullable(entityManager.find(Book.class, id));
     }
 }
+
