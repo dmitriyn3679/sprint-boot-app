@@ -4,7 +4,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import mate.academy.bookstore.dto.BookDto;
 import mate.academy.bookstore.dto.CreateBookRequestDto;
-import mate.academy.bookstore.exceptions.EntityNotFoundExceptions;
+import mate.academy.bookstore.exception.EntityNotFoundExceptions;
 import mate.academy.bookstore.mapper.BookMapper;
 import mate.academy.bookstore.model.Book;
 import mate.academy.bookstore.repository.BookRepository;
@@ -24,9 +24,10 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDto> findAll() {
-        List<Book> books = bookRepository.findAll();
-
-        return books.stream().map(bookMapper::toDto).toList();
+        return bookRepository.findAll()
+                .stream()
+                .map(bookMapper::toDto)
+                .toList();
     }
 
     @Override
