@@ -22,7 +22,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(RegistrationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.CONFLICT)
     public Map<String, String> handleRegistrationException(RegistrationException e) {
         Map<String, String> res = new HashMap<>();
         res.put("error", e.getMessage());

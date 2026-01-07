@@ -1,8 +1,12 @@
 package mate.academy.bookstore.config;
 
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -12,13 +16,20 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(csrf -> csrf.disable())
-                .httpBasic(basic -> basic.disable())
-                .formLogin(form -> form.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .anyRequest().permitAll()
+                .cors(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(
+                        auth -> auth
+                                .requestMatchers(
+                                        antMatcher("/auth/**"),
+                                        antMatcher("/swagger-ui/**"),
+                                        antMatcher("/v3/api-docs/**"))
+                                .permitAll()
+                                .anyRequest()
+                                .authenticated()
                 )
+                .sessionManagement(
+                        s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
     }
 
