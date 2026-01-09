@@ -13,6 +13,7 @@ import mate.academy.bookstore.dto.UserResponseDto;
 import mate.academy.bookstore.exception.RegistrationException;
 import mate.academy.bookstore.service.AuthenticationService;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

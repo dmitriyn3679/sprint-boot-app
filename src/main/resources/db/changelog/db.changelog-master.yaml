@@ -11,3 +11,5 @@ databaseChangeLog:
       file: db/changelog/changes/05-insert-admin-user.yaml
   - include:
       file: db/changelog/changes/06-assign-user-role-to-existing-users.yaml
+  - include:
+      file: db/changelog/changes/07-add-user-soft-delete.yaml

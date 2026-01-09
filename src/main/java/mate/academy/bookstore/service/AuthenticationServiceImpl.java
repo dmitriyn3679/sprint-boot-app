@@ -12,9 +12,11 @@ import mate.academy.bookstore.repository.RoleRepository;
 import mate.academy.bookstore.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
@@ -34,7 +36,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
-                .orElseThrow(() -> new RegistrationException("Role USER not found"));
+                .orElseThrow(() ->
+                        new RegistrationException("Role" + RoleName.ROLE_USER + "not found"));
 
         user.getRoles().add(userRole);
 
