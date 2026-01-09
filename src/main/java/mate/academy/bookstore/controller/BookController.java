@@ -12,6 +12,7 @@ import mate.academy.bookstore.service.BookService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +32,7 @@ public class BookController {
 
     @Operation(summary = "Get all books (paginated)")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Books returned")})
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @GetMapping
     public Page<BookDto> findAll(Pageable pageable) {
         return bookService.findAll(pageable);
@@ -41,6 +43,7 @@ public class BookController {
             @ApiResponse(responseCode = "200", description = "Book returned"),
             @ApiResponse(responseCode = "404", description = "Book not found")
     })
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @GetMapping("/{id}")
     public BookDto findById(@PathVariable Long id) {
         return bookService.findById(id);
@@ -54,6 +57,7 @@ public class BookController {
             @ApiResponse(responseCode = "200", description = "Book successfully created"),
             @ApiResponse(responseCode = "400", description = "Validation error")
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public BookDto save(@RequestBody @Valid CreateBookRequestDto requestDto) {
         return bookService.save(requestDto);
@@ -68,6 +72,7 @@ public class BookController {
             @ApiResponse(responseCode = "400", description = "Validation error"),
             @ApiResponse(responseCode = "404", description = "Book not found")
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public BookDto update(
             @PathVariable Long id,
@@ -85,6 +90,7 @@ public class BookController {
             @ApiResponse(responseCode = "404", description = "Book not found")
     })
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {
         bookService.delete(id);
