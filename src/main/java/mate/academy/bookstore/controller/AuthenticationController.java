@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import mate.academy.bookstore.dto.UserLoginRequestDto;
+import mate.academy.bookstore.dto.UserLoginResponseDto;
 import mate.academy.bookstore.dto.UserRegistrationRequestDto;
 import mate.academy.bookstore.dto.UserResponseDto;
 import mate.academy.bookstore.exception.RegistrationException;
@@ -47,5 +49,10 @@ public class AuthenticationController {
     public UserResponseDto register(@RequestBody @Valid UserRegistrationRequestDto request)
             throws RegistrationException {
         return authenticationService.register(request);
+    }
+
+    @PostMapping("/login")
+    public UserLoginResponseDto login(@RequestBody @Valid UserLoginRequestDto request) {
+        return authenticationService.login(request);
     }
 }
